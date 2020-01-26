@@ -1,8 +1,9 @@
+const chalk = require("chalk");
 let A_Star = require("./a_star.js");
 let genObstacles = require("./3Dobstacles.js");
 
 // How many tests?
-let runCount = 200;
+let runCount = 50;
 
 
 
@@ -23,11 +24,15 @@ function runAstar() {
 
 let sum = 0;
 let max_val = 0;
-console.log(`Running ${runCount} pathfinding attempts...`);
+console.log(chalk.green(`Running ${runCount} pathfinding attempts...`));
 for (let i = 0; i < runCount; i++) {
     let time = runAstar();
     sum+=time;
     max_val = Math.max(time, max_val);
-    console.log(`Run #${i+1} (${sum/(i+1)})`);
+    console.log(`Path #${chalk.cyan(i+1)}: (${chalk.yellow(roundDecimal(sum/(i+1), 6))} sec on avg)`);
 }
-console.log(`Avg: ${sum/runCount}, Max: ${max_val}`);
+console.log(`${chalk.red("Avg:")} ${chalk.yellow(sum/runCount)} sec\n${chalk.red("Max:")} ${chalk.yellow(max_val)} sec`);
+
+function roundDecimal(n, d) {
+    return n.toString().substring(0, d);
+}
