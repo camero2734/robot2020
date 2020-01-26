@@ -2,7 +2,7 @@ let A_Star = require("./a_star.js");
 let genObstacles = require("./3Dobstacles.js");
 
 // How many tests?
-let runCount = 1000;
+let runCount = 200;
 
 
 
@@ -30,4 +30,4 @@ for (let i = 0; i < runCount; i++) {
     max_val = Math.max(time, max_val);
     console.log(`Run #${i+1} (${sum/(i+1)})`);
 }
-console.log(`Avg: ${sum/runCount}, Max: ${max_val},\nMax openSet len: ${maxOpenSetLength}`);
+console.log(`Avg: ${sum/runCount}, Max: ${max_val}`);

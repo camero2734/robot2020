@@ -1,6 +1,5 @@
 const PriorityQueue = require("js-priority-queue");
 
-let maxOpenSetLength = 0;
 let degreeMap = {
     0: [-3, 1],
     15: [-2, 1],
@@ -116,8 +115,6 @@ function A_Star(start, goal, obstacles, width=72, height=108) {
     cameFrom = {};
 
     while (openSet.length > 0) {
-        maxOpenSetLength = Math.max(openSet.length, maxOpenSetLength);
-
         let current = openSet.dequeue();
         if (ids.hasOwnProperty(current.id)) delete ids[current.id];
 
