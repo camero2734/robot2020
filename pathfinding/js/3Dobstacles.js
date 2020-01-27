@@ -107,4 +107,5 @@ function pointInRobot(_o, r) {
     return (insideX && insideY)
 }
 
+
 module.exports = generateObstacles;
