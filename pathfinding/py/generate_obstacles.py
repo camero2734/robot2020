@@ -57,8 +57,8 @@ def generate_obstacles():
             for x in range(-rw//2, 1+rw//2, 5):
                 for y in range(-rh//2, 1+rh//2, 5):
                     # Rotate point by ang (wrt obstacle center) and find closest grid point
-                    Px = int(((x*c - y*s) + o[0])//5)
-                    Py = int(((x*s + y*c) + o[1])//5)
+                    Px = round(((x*c - y*s) + o[0])/5)
+                    Py = round(((x*s + y*c) + o[1])/5)
                     # Mark grid point as obstacle
                     try:
                         obs[Px][Py][ang//15] = True;

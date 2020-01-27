@@ -107,5 +107,8 @@ function pointInRobot(_o, r) {
     return (insideX && insideY)
 }
 
+let start = Date.now();
+generateObstacles();
+console.log((Date.now() - start) / 1000);
 
 module.exports = generateObstacles;
