@@ -62,7 +62,8 @@ def generate_obstacles():
                     Py = round(((xs + y*c) + o[1])/5)
                     # Mark grid point as obstacle (try/except bc point could be off the map)
                     try:
-                        obs[Px][Py][ang] = True;
+                        if (Px >= 0 and Py >= 0):
+                            obs[Px][Py][ang] = True;
                     except IndexError:
                         pass
 
