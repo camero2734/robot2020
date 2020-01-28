@@ -1,3 +1,4 @@
+import time
 import math
 import random
 import numpy
@@ -49,22 +50,52 @@ def generate_obstacles():
     #
     obs = [[[False for a in range(0, 12)] for y in range(1+height//5)] for x in range(1+width//5)]
 
-    for o in obstacles:
-        for ang in range(0, 12):
-            angle = math.radians(15 * ang)
-            c, s = math.cos(angle), math.sin(angle)
-            # Check robot-sized area around obstacle to see which points collide at angle
-            for x in range(-rw//2, 1+rw//2, 5):
-                xc, xs = x*c, x*s
-                for y in range(-rh//2, 1+rh//2, 5):
-                    # Rotate point by ang (wrt obstacle center) and find closest grid point
-                    Px = round(((xc - y*s) + o[0])/5)
-                    Py = round(((xs + y*c) + o[1])/5)
-                    # Mark grid point as obstacle (try/except bc point could be off the map)
-                    try:
-                        obs[Px][Py][ang] = True;
-                    except IndexError:
-                        pass
+    startTime = time.time()
+    # Create point array [[x, y], [x, y, ...]]
+    x_vals = []
+    y_vals = []
+    for x in range(-rw//2, 1+rw//2, 5):
+        for y in range(-rh//2, 1+rh//2, 5):
+            x_vals.append(x)
+            y_vals.append(y)
+
+    points = numpy.vstack((x_vals, y_vals))
+
+    # Loop through angles:
+    for ang in range(0, 12):
+        angle = math.radians(15 * ang)
+        # Create rotation matrix
+        c, s = math.cos(angle), math.sin(angle)
+        rot_m = numpy.array([[c, -s], [s, c]])
+        # Multiply by rotation matrix
+        rot_points = numpy.matmul(rot_m, points)
+        # Loop through each point and add to obs
+        for p in rot_points.T:
+            px = int(p[0] / 5)
+            py = int(p[1] / 5)
+            for o in obstacles:
+                try:
+                    obs[px + int(o[0]/5)][py + int(o[1]/5)][ang] = True;
+                except IndexError:
+                    pass
+
+    # exit()
+    # for o in obstacles:
+    #     for ang in range(0, 12):
+    #         angle = math.radians(15 * ang)
+    #         c, s = math.cos(angle), math.sin(angle)
+    #         # Check robot-sized area around obstacle to see which points collide at angle
+    #         for x in range(-rw//2, 1+rw//2, 5):
+    #             xc, xs = x*c, x*s
+    #             for y in range(-rh//2, 1+rh//2, 5):
+    #                 # Rotate point by ang (wrt obstacle center) and find closest grid point
+    #                 Px = round(((xc - y*s) + o[0])/5)
+    #                 Py = round(((xs + y*c) + o[1])/5)
+    #                 # Mark grid point as obstacle (try/except bc point could be off the map)
+    #                 try:
+    #                     obs[Px][Py][ang] = True;
+    #                 except IndexError:
+    #                     pass
 
     print([(c[0]//5, c[1]//5) for c in centers])
     return obs
