@@ -30,8 +30,8 @@ def generate_obstacles():
     for i in range(numObstacles):
         dim = None
         while (dim is None):
-            cx = random.randint(30, width - 30)
-            cy = random.randint(int(0.33 * height), int(0.67 * height))
+            cx = random.randint(30, 330)
+            cy = random.randint(180, 360)
             cr = random.randint(30, 50) / 2
 
             if all(dist(c[0], c[1], cx, cy) >= cr + c[2] for c in centers):
@@ -50,18 +50,19 @@ def generate_obstacles():
     obs = [[[False for a in range(0, 12)] for y in range(1+height//5)] for x in range(1+width//5)]
 
     for o in obstacles:
-        for ang in range(0, 180, 15):
-            angle = ang * math.pi / 180
+        for ang in range(0, 12):
+            angle = math.radians(15 * ang)
             c, s = math.cos(angle), math.sin(angle)
             # Check robot-sized area around obstacle to see which points collide at angle
             for x in range(-rw//2, 1+rw//2, 5):
+                xc, xs = x*c, x*s
                 for y in range(-rh//2, 1+rh//2, 5):
                     # Rotate point by ang (wrt obstacle center) and find closest grid point
-                    Px = round(((x*c - y*s) + o[0])/5)
-                    Py = round(((x*s + y*c) + o[1])/5)
-                    # Mark grid point as obstacle
+                    Px = round(((xc - y*s) + o[0])/5)
+                    Py = round(((xs + y*c) + o[1])/5)
+                    # Mark grid point as obstacle (try/except bc point could be off the map)
                     try:
-                        obs[Px][Py][ang//15] = True;
+                        obs[Px][Py][ang] = True;
                     except IndexError:
                         pass
 
